@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>DRAG & DROP CARRITO DE COMPRAS</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script type="text/javascript" src="jquery-1.5.min.js"></script>
+    <script type="text/javascript" src="jquery-ui-1.8.9.custom.min.js"></script>
+    <script type="text/javascript">
+    var total_items = 0;
+    var total_price = 0;
+    $(document).ready(function() {
+
+        $(".item").draggable({
+            revert: true            
+        });
+        $("#cart_items").draggable({
+            axis: "x"
+        });
+
+        $("#cart_items").droppable({
+            accept: ".item",
+            activeClass: "drop-active",
+            hoverClass: "drop-hover",
+            drop: function(event, ui) {
+                var item = ui.draggable.html();
+                var itemid = ui.draggable.attr("id");
+                var html = '<div class="item icart">';
+                html = html + '<div class="divrm">';
+                html = html + '<a onclick="remove(this)" class="remove '+itemid+'">&times;</a>';
+                html = html + '<div/>'+item+'</div>';
+                $("#cart_items").append(html);
+
+               
+                total_items++;
+                $("#citem").html(total_items);
+
+                
+                var price = parseInt(ui.draggable.find(".price").html().replace("Q ", ""));
+                total_price = total_price + price;
+                $("#cprice").html("Q " + total_price);
+
+                
+                if (total_items > 4) {
+                    $("#cart_items").animate({width: "+=120"}, 'slow');
+                }
+            }
+        });
+       
+
+        $("#btn_next").click(function() {
+            $("#cart_items").animate({left: "-=100"}, 100);
+            return false;
+        });
+        $("#btn_prev").click(function() {
+            $("#cart_items").animate({left: "+=100"}, 100);
+            return false;
+        });
+        $("#btn_clear").click(function() {
+            $("#cart_items").fadeOut("2000", function() {
+               $(this).html("").fadeIn("fast").css({left: 0});
+            });
+            $("#citem").html("0");
+            $("#cprice").html("Q 0");
+            total_items = 0;
+            total_price = 0;
+            return false;
+        });
+    });
+    function remove(el) {
+        $(el).hide();
+        $(el).parent().parent().effect("highlight", {color: "#ff0000"}, 1000);
+        $(el).parent().parent().fadeOut('1000');
+        setTimeout(function() {
+            $(el).parent().parent().remove();
+            
+            if (total_items > 3) {
+                $("#cart_items").animate({width: "-=120"}, 'slow');
+            }
+        }, 1100);
+
+        
+        total_items--;
+        $("#citem").html(total_items);
+
+        
+        var price = parseInt($(el).parent().parent().find(".price").html().replace("Q ", ""));
+        total_price = total_price - price;
+        $("#cprice").html("Q " + total_price);
+    }
+    </script>
+  </head>
+  <body>
+       <div id="main">
+          <a href="">Integrantes de Grupo: </a><br>
+          &nbsp;&nbsp;&nbsp;
+          <a href="">Kelvin Sarat 0900-14-1000</a>
+          &nbsp;&nbsp;&nbsp;
+          <a href="">Kevin Velasquez  0900-14-7499</a>
+          &nbsp;&nbsp;&nbsp;
+          <a href="">Sergio Morales  0900-09-300</a>
+          &nbsp;&nbsp;&nbsp;
+          <a href="">Sergio Gomez  090-05-194</a>
+          &nbsp;&nbsp;&nbsp;
+
+      </div>
+      <div id="item_container">
+          <div class="item" id="i1">
+              <img src="img/tomate.jpg"/>
+              <label class="title">TOMATE</label>
+              <label class="price">Q 4</label>
+          </div>
+          <div class="item" id="i2">
+              <img src="img/cebolla.jpg"/>
+              <label class="title">CEBOLLA</label>
+              <label class="price">Q 4</label>
+          </div>
+          <div class="item" id="i3">
+              <img src="img/perejil.jpg"/>
+              <label class="title">PEREJIL</label>
+              <label class="price">Q 1</label>
+          </div>
+          <div class="item" id="i4">
+              <img src="img/cilantro.jpg"/>
+              <label class="title">CILANTRO</label>
+              <label class="price">Q 1</label>
+          </div>
+          <div class="item" id="i5">
+              <img src="img/papa.jpg"/>
+              <label class="title">PAPA</label>
+              <label class="price">Q 4</label>
+          </div>
+          <div class="item" id="i6">
+              <img src="img/lechuga.jpg"/>
+              <label class="title">LECHUGA</label>
+              <label class="price">Q 2</label>
+          </div>
+          <div class="item" id="i7">
+              <img src="img/zanahoria.jpg"/>
+              <label class="title">ZANAHORIA</label>
+              <label class="price">Q 3</label>
+          </div>
+          <div class="item" id="i8">
+              <img src="img/aguacate.jpg"/>
+              <label class="title">AGUACATE</label>
+              <label class="price">Q 3</label>
+          </div>
+          <div class="item" id="i9">
+              <img src="img/pepino.jpg"/>
+              <label class="title">PEPINO</label>
+              <label class="price">Q 2</label>
+          </div>
+          <div class="item" id="i10">
+              <img src="img/limon.jpg"/>
+              <label class="title">LIMON</label>
+              <label class="price">Q 3</label>
+          </div>
+          <div class="clear"></div>
+      </div>
+      <div id="cart_container">
+          <div id="cart_title">
+              <span>CARRITO DE COMPRAS</span>
+              <div class="clear"></div>
+          </div>
+          <div id="cart_toolbar">
+              <div id="cart_items" class="back"></div>
+          </div>
+          <div id="navigate">
+              <div id="nav_left">
+                  <a href="" id="btn_prev"><</a>
+                  <a href="" id="btn_next">></a>
+                  <a href="" id="btn_clear">ELIMINAR TODO</a>
+              </div>
+              <div id="nav_right">
+                  <span class="sptext">
+                      <label>CANTIDAD </label><label class="count" id="citem">0</label>
+                  </span>
+                  <span class="sptext">
+                      <label>PRECIO </label><label class="count" id="cprice">Q 0</label>
+                  </span>
+              </div>
+              <div class="clear"></div>
+          </div>
+      </div>
+  </body>
+</html>

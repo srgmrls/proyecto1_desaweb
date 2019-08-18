@@ -1,0 +1,10 @@
+Tomate 3
+Cebolla 4
+perejil 0.5
+cilantro 0.5
+papa 4
+lechuga 2
+zanahoria 3
+aguacate 3
+pepino 2
+limon 3
